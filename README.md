@@ -10,3 +10,19 @@ Você deve realizar os seguintes passos:
 * criar uma conta na OpenAI e gerar uma chave pelo link https://platform.openai.com/api-keys
 * caso deseje utilizar outro modelo como o Gemini, por exemplo, gere sua chave pelo link https://aistudio.google.com/app/apikey?hl=pt-br
 * cada branch corresponde a uma etapa de implementação do workshop.
+
+
+
+# Prática 2
+* Criar uma Cloud Function na Twilio
+* Criar um endpoint protegido `/identificaLixo`
+* Acessar o código-fonte de exemplo
+* Adicionar bibliotecas
+* Adicionar variáveis de ambiente
+* Receber parâmetros
+* Download de Imagens
+* Construindo o Prompt
+* Acionamento da LLM
+* Construindo a resposta
+* Configurar o Fluxo para acessar a cloud function
+

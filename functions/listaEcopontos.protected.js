@@ -1,5 +1,3 @@
-// Carrega das Dependencias
-
 
 
 function formatarRespostaListaPonto(ponto) {

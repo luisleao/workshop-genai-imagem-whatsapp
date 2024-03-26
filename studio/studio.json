@@ -34,7 +34,7 @@
       "type": "split-based-on",
       "transitions": [
         {
-          "next": "onboarding",
+          "next": "tem_geo",
           "event": "noMatch"
         },
         {
@@ -124,6 +124,129 @@
       }
     },
     {
+      "name": "IdentificarLixoREST",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "event": "success"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 940,
+          "y": 530
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "body": "",
+        "parameters": [
+          {
+            "value": "{{trigger.message.MediaUrl0}}",
+            "key": "url"
+          },
+          {
+            "value": "{{trigger.message.To}}",
+            "key": "from"
+          },
+          {
+            "value": "{{trigger.message.From}}",
+            "key": "to"
+          },
+          {
+            "value": "{{trigger.message.MessagingServiceSid}}",
+            "key": "messagingServiceSid"
+          },
+          {
+            "value": "{{trigger.message.ProfileName}}",
+            "key": "profileName"
+          }
+        ],
+        "url": "https://identificalixo-akbmy6t33q-uc.a.run.app"
+      }
+    },
+    {
+      "name": "tem_geo",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "onboarding",
+          "event": "noMatch"
+        },
+        {
+          "next": "aviso_timer_ecoponto_geral",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "GEO",
+              "arguments": [
+                "{{trigger.message.Latitude}}"
+              ],
+              "type": "is_not_blank",
+              "value": "Is Not Blank"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{trigger.message.Latitude}}",
+        "offset": {
+          "x": -830,
+          "y": -90
+        }
+      }
+    },
+    {
+      "name": "retorno_ecoponto",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1030,
+          "y": 810
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "message_type": "custom",
+        "to": "{{contact.channel.address}}",
+        "body": "{{widgets.ListaEcoPontos.parsed.mensagem}}"
+      }
+    },
+    {
+      "name": "fail_ecoponto",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -660,
+          "y": 800
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "message_type": "custom",
+        "to": "{{contact.channel.address}}",
+        "body": "Infelizmente ocorreu um erro ao buscar pelo local de coleta mais próximo de você.\n\nTente novamente mais tarde."
+      }
+    },
+    {
       "name": "split_2",
       "type": "split-based-on",
       "transitions": [
@@ -137,7 +260,7 @@
             {
               "friendly_name": "TEM LOCATION",
               "arguments": [
-                "{{widgets.ListaEcoPonto.parsed.location}}"
+                "{{widgets.ListaEcoPontoREST.parsed.location}}"
               ],
               "type": "is_not_blank",
               "value": "Is Not Blank"
@@ -146,7 +269,7 @@
         }
       ],
       "properties": {
-        "input": "{{widgets.ListaEcoPonto.parsed.location}}",
+        "input": "{{widgets.ListaEcoPontoREST.parsed.location}}",
         "offset": {
           "x": -1840,
           "y": 2930
@@ -200,6 +323,31 @@
         "message_type": "custom",
         "to": "{{contact.channel.address}}",
         "body": "🚨🚨🚨🚨🚨🚨🚨\nTODO: chamada de localização\n🚨🚨🚨🚨🚨🚨🚨"
+      }
+    },
+    {
+      "name": "aviso_timer_ecoponto_geral",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "ListaEcoPontos",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -900,
+          "y": 280
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "message_type": "custom",
+        "to": "{{contact.channel.address}}",
+        "body": "Só um momento que estou buscando na base de dados de ecopontos o local de descarte mais próximo."
       }
     },
     {
@@ -434,8 +582,8 @@
       ],
       "properties": {
         "offset": {
-          "x": -290,
-          "y": 110
+          "x": -1530,
+          "y": 50
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
@@ -443,6 +591,40 @@
         "message_type": "custom",
         "to": "{{contact.channel.address}}",
         "body": "Boas-vindas!"
+      }
+    },
+    {
+      "name": "ListaEcoPontos",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "retorno_ecoponto",
+          "event": "success"
+        },
+        {
+          "next": "fail_ecoponto",
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "ZScb02297cbd4ee320977f59a4b176a7c1",
+        "environment_sid": "ZE771a5460149ae7670bc5d5e01788dc28",
+        "offset": {
+          "x": -760,
+          "y": 570
+        },
+        "function_sid": "ZHbb24a5ae8d0d003526e15faf7020c527",
+        "parameters": [
+          {
+            "value": "{{trigger.message.Latitude}}",
+            "key": "lat"
+          },
+          {
+            "value": "{{trigger.message.Longitude}}",
+            "key": "lng"
+          }
+        ],
+        "url": "https://tdcsummitsp-solved-1804.twil.io/listaEcopontos"
       }
     }
   ],

@@ -13,6 +13,9 @@ Você deve realizar os seguintes passos:
 
 
 
-# Prática 3
-* 
+# Prática EXTRA
+* Variável de ambiente GEMINI_API_KEY em aistudio.google.com/app/apikey
+* Adicione a dependência do Gemini: @google/generative-ai
+* Mude a chamada de `analyzeImageWithOpenAI` para `analyzeImageWithGemini` 
+
 

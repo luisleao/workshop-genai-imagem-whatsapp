@@ -1,20 +1,18 @@
 // Carrega das Dependencias
 
 // Define as Variaveis de Ambiente
-/* ADICIONAR VARIÁVEIS DE AMBIENTE
 const {
     ACCOUNT_SID,
     AUTH_TOKEN,
     TWILIO_STUDIO_FLOW_SID, 
     TWILIO_MESSAGE_SERVICE_SID,
-    OPENAI_API_KEY
+    OPENAI_API_KEY,
+    // GEMINI_API_KEY
 } = process.env;
-*/
 
 
 // Configura as APIs das IAs
 
-/* DOWNLOAD DE IMAGENS
 // Função auxiliar para baixar arquivo do Twilio (necessário pela autenticação)
 const downloadTwilioMedia = async (mediaUrl) => {
     const axios = require('axios'); // Para chamadas HTTP
@@ -37,10 +35,8 @@ const downloadTwilioMedia = async (mediaUrl) => {
             return null;
         });
 }
-*/
 
 
-/* CONSTRUINDO O PROMPT
 // Define o Prompt
 const promptAI = `Esta é a imagem de um lixo, faça uma análise completa e retorne um arquivo json seguinte formato:
             
@@ -52,9 +48,9 @@ const promptAI = `Esta é a imagem de um lixo, faça uma análise completa e ret
 
     Retorne APENAS o conteúdo do JSON de forma textual e nada mais. Deve ser um JSON válido.`
 
-*/
 
-/* CONSTRUINDO A RESPOSTA
+
+
 // Função auxiliar para extrair o JSON
 const parseJSON = (jsonString) => {
     let resposta;
@@ -66,10 +62,10 @@ const parseJSON = (jsonString) => {
     }
     return resposta;
 }
-*/
 
 
-/* ACIONAMENTO DA LLM
+
+
 // Função para Analisar a Imagem e chamar o Modelo
 async function analyzeImageWithOpenAI(imageUrl, from) {
     const imageBase64 = await downloadTwilioMedia(imageUrl);
@@ -100,12 +96,24 @@ async function analyzeImageWithOpenAI(imageUrl, from) {
     let response = parseJSON(openAIResponse.choices[0].message.content)
     return response
 }
-*/
-async function analyzeImageWithOpenAI(imageUrl, from) {
-    return {
-        'mensagem': `Ainda não implementado reconhecimento de imagens!\n\nURL: ${imageUrl}`
+
+/* CODIGO ACESSO API DA GEMINI
+//Função para analisar a imagem usando Gemini
+async function analyzeImageWithGemini(imageUrl, from) {
+    const imageBase64 = await downloadTwilioMedia(imageUrl);
+    
+    imageData = {
+        inlineData: { data: imageBase64.base64, mimeType: imageBase64.contentType },
     }
+    const { GoogleGenerativeAI } = require("@google/generative-ai");
+    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+
+    const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+    const result = await model.generateContent([promptAI, [imageData]]);
+    let response = parseJSON(result.response);
+    return response;
 }
+*/
 
 
 // Função Handler para processar as mensagens
@@ -114,7 +122,7 @@ async function analyzeImageWithOpenAI(imageUrl, from) {
 */
 exports.handler = async function(context, event, callback) {
     
-    /* RECEBER PARÂMETROS
+
     const imageUrl = event.url; // A URL da imagem enviada via Twilio.
     if (!imageUrl) {
         console.error('Nenhuma URL de imagem fornecida');
@@ -124,15 +132,11 @@ exports.handler = async function(context, event, callback) {
   
     try {
         let response = await analyzeImageWithOpenAI(imageUrl, event.from);
+        // let response = await analyzeImageWithGemini(imageUrl, event.from);
         callback(null, response);
     } catch (error) {
         console.error('Erro ao processar a imagem', error);
         callback('Erro interno', null);
     }
-    */
-
-    callback(null, {
-        'mensagem': 'Hello World'
-    });
   
-  };
+};

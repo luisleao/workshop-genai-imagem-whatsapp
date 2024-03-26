@@ -106,7 +106,8 @@ async function analyzeImageWithGemini(imageUrl, from) {
 
     const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
     const result = await model.generateContent([promptAI, [imageData]]);
-    let response = parseJSON(result.response);
+    console.log('GEMINI RESULT: ', result.response.text());
+    let response = parseJSON(result.response.text());
     return response;
 }
 */

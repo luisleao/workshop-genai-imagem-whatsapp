@@ -13,16 +13,6 @@ Você deve realizar os seguintes passos:
 
 
 
-# Prática 2
-* Criar uma Cloud Function na Twilio
-* Criar um endpoint protegido `/identificaLixo`
-* Acessar o código-fonte de exemplo
-* Adicionar bibliotecas
-* Adicionar variáveis de ambiente
-* Receber parâmetros
-* Download de Imagens
-* Construindo o Prompt
-* Acionamento da LLM
-* Construindo a resposta
-* Configurar o Fluxo para acessar a cloud function
+# Prática 3
+* 
 

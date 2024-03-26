@@ -5,8 +5,6 @@
 const {
     ACCOUNT_SID,
     AUTH_TOKEN,
-    TWILIO_STUDIO_FLOW_SID, 
-    TWILIO_MESSAGE_SERVICE_SID,
     OPENAI_API_KEY
 } = process.env;
 */

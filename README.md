@@ -1,3 +1,4 @@
+![Imagem do Workshop Desvendando o Potencial do ChatGPT](./assets/header.png)
 # Workshop Desvendando o Potencial do ChatGPT
 ## Reconhecimento de Imagens e Interações no WhatsApp
 

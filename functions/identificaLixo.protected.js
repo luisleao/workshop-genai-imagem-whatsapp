@@ -54,6 +54,7 @@ const promptAI = `Esta é a imagem de um lixo, faça uma análise completa e ret
 
 */
 
+/* CONSTRUINDO A RESPOSTA
 // Função auxiliar para extrair o JSON
 const parseJSON = (jsonString) => {
     let resposta;
@@ -65,6 +66,7 @@ const parseJSON = (jsonString) => {
     }
     return resposta;
 }
+*/
 
 
 /* ACIONAMENTO DA LLM
@@ -101,7 +103,7 @@ async function analyzeImageWithOpenAI(imageUrl, from) {
 */
 async function analyzeImageWithOpenAI(imageUrl, from) {
     return {
-        'mensagem': 'Ainda não implementado reconhecimento de imagens!'
+        'mensagem': `Ainda não implementado reconhecimento de imagens!\n\nURL: ${imageUrl}`
     }
 }
 

@@ -1,0 +1,311 @@
+{
+    "description": "A New Flow",
+    "states": [
+      {
+        "name": "Trigger",
+        "type": "trigger",
+        "transitions": [
+          {
+            "next": "tem_imagem",
+            "event": "incomingMessage"
+          },
+          {
+            "event": "incomingCall"
+          },
+          {
+            "event": "incomingConversationMessage"
+          },
+          {
+            "event": "incomingRequest"
+          },
+          {
+            "event": "incomingParent"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": -140,
+            "y": -380
+          }
+        }
+      },
+      {
+        "name": "tem_imagem",
+        "type": "split-based-on",
+        "transitions": [
+          {
+            "next": "onboarding",
+            "event": "noMatch"
+          },
+          {
+            "next": "RetornoMensagemComImagem",
+            "event": "match",
+            "conditions": [
+              {
+                "friendly_name": "IMAGEM",
+                "arguments": [
+                  "{{trigger.message.MediaContentType0}}"
+                ],
+                "type": "matches_any_of",
+                "value": "image/jpeg"
+              }
+            ]
+          },
+          {
+            "next": "Invalido",
+            "event": "match",
+            "conditions": [
+              {
+                "friendly_name": "INVALIDO",
+                "arguments": [
+                  "{{trigger.message.MediaContentType0}}"
+                ],
+                "type": "matches_any_of",
+                "value": "video/mp4,audio/aac, audio/mp4, audio/mpeg, audio/amr, audio/ogg"
+              }
+            ]
+          }
+        ],
+        "properties": {
+          "input": "{{trigger.message.MediaContentType0}}",
+          "offset": {
+            "x": -40,
+            "y": -160
+          }
+        }
+      },
+      {
+        "name": "RetornoMensagemComImagem",
+        "type": "send-message",
+        "transitions": [
+          {
+            "event": "sent"
+          },
+          {
+            "event": "failed"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 270,
+            "y": 220
+          },
+          "service": "{{trigger.message.InstanceSid}}",
+          "channel": "{{trigger.message.ChannelSid}}",
+          "from": "{{flow.channel.address}}",
+          "message_type": "custom",
+          "to": "{{contact.channel.address}}",
+          "body": "Recebi uma imagem!\n\nSó um momento que vamos tentar identificá-la..."
+        }
+      },
+      {
+        "name": "Invalido",
+        "type": "send-message",
+        "transitions": [
+          {
+            "event": "sent"
+          },
+          {
+            "event": "failed"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 670,
+            "y": 140
+          },
+          "service": "{{trigger.message.InstanceSid}}",
+          "channel": "{{trigger.message.ChannelSid}}",
+          "from": "{{flow.channel.address}}",
+          "message_type": "custom",
+          "to": "{{contact.channel.address}}",
+          "body": "No momento ainda não conseguimos identificar resíduos através de arquivos de vídeo ou áudio.\n\nMas você pode mandar uma foto pra gente!"
+        }
+      },
+      {
+        "name": "split_2",
+        "type": "split-based-on",
+        "transitions": [
+          {
+            "event": "noMatch"
+          },
+          {
+            "next": "send_message_1",
+            "event": "match",
+            "conditions": [
+              {
+                "friendly_name": "TEM LOCATION",
+                "arguments": [
+                  "{{widgets.ListaEcoPonto.parsed.location}}"
+                ],
+                "type": "is_not_blank",
+                "value": "Is Not Blank"
+              }
+            ]
+          }
+        ],
+        "properties": {
+          "input": "{{widgets.ListaEcoPonto.parsed.location}}",
+          "offset": {
+            "x": -1840,
+            "y": 2930
+          }
+        }
+      },
+      {
+        "name": "send_message_1",
+        "type": "send-message",
+        "transitions": [
+          {
+            "event": "sent"
+          },
+          {
+            "event": "failed"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": -1260,
+            "y": 2930
+          },
+          "service": "{{trigger.message.InstanceSid}}",
+          "channel": "{{trigger.message.ChannelSid}}",
+          "from": "{{flow.channel.address}}",
+          "attributes": "{\npersistentAction: ['geo:37.787890,-122.391664|375 Beale St']\n}",
+          "message_type": "custom",
+          "to": "{{contact.channel.address}}",
+          "body": "Aqui está a localização no mapa."
+        }
+      },
+      {
+        "name": "Copy_of_boas_vindas",
+        "type": "send-message",
+        "transitions": [
+          {
+            "event": "sent"
+          },
+          {
+            "event": "failed"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": -2910,
+            "y": 2110
+          },
+          "service": "{{trigger.message.InstanceSid}}",
+          "channel": "{{trigger.message.ChannelSid}}",
+          "from": "{{flow.channel.address}}",
+          "message_type": "custom",
+          "to": "{{contact.channel.address}}",
+          "body": "🚨🚨🚨🚨🚨🚨🚨\nTODO: chamada de localização\n🚨🚨🚨🚨🚨🚨🚨"
+        }
+      },
+      {
+        "name": "gerarDicaRandomica",
+        "type": "make-http-request",
+        "transitions": [
+          {
+            "next": "retorno_gerarDicaRandomica",
+            "event": "success"
+          },
+          {
+            "next": "erro_gerarDicaRandomica",
+            "event": "failed"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": -3330,
+            "y": 760
+          },
+          "method": "POST",
+          "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+          "body": "",
+          "parameters": [
+            {
+              "value": "{{flow.variables.ecoponto}}",
+              "key": "filtro"
+            }
+          ],
+          "url": "https://gerardicarandomica-akbmy6t33q-uc.a.run.app"
+        }
+      },
+      {
+        "name": "retorno_gerarDicaRandomica",
+        "type": "send-message",
+        "transitions": [
+          {
+            "event": "sent"
+          },
+          {
+            "event": "failed"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": -3500,
+            "y": 1040
+          },
+          "service": "{{trigger.message.InstanceSid}}",
+          "channel": "{{trigger.message.ChannelSid}}",
+          "from": "{{flow.channel.address}}",
+          "message_type": "custom",
+          "to": "{{contact.channel.address}}",
+          "body": "{{widgets.gerarDicaRandomica.parsed.mensagem}}"
+        }
+      },
+      {
+        "name": "erro_gerarDicaRandomica",
+        "type": "send-message",
+        "transitions": [
+          {
+            "event": "sent"
+          },
+          {
+            "event": "failed"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": -3150,
+            "y": 1030
+          },
+          "service": "{{trigger.message.InstanceSid}}",
+          "channel": "{{trigger.message.ChannelSid}}",
+          "from": "{{flow.channel.address}}",
+          "message_type": "custom",
+          "to": "{{contact.channel.address}}",
+          "body": "Dica de Ouro!\n\n*Não sabe qual o destino do que quer descartar?*\n\nEnvie a foto do item aqui e vamos tentar classificar o que é e qual a melhor destinação dele."
+        }
+      },
+      {
+        "name": "onboarding",
+        "type": "send-message",
+        "transitions": [
+          {
+            "event": "sent"
+          },
+          {
+            "event": "failed"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": -250,
+            "y": 130
+          },
+          "service": "{{trigger.message.InstanceSid}}",
+          "channel": "{{trigger.message.ChannelSid}}",
+          "from": "{{flow.channel.address}}",
+          "message_type": "custom",
+          "to": "{{contact.channel.address}}",
+          "body": "Boas-vindas!"
+        }
+      }
+    ],
+    "initial_state": "Trigger",
+    "flags": {
+      "allow_concurrent_calls": true
+    }
+  }

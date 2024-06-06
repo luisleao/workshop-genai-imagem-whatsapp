@@ -1,8 +1,11 @@
 ![Imagem do Workshop Desvendando o Potencial do ChatGPT](./assets/header.png)
-# Workshop Desvendando o Potencial do ChatGPT
+# Workshop Desvendando o Potencial da IA Generativa
 ## Reconhecimento de Imagens e Interações no WhatsApp
 
-Este workshop foi realizado no TDC Summit São Paulo, dia 27/03/2024 por [Luís Leão](https://linkedin.com/in/luisleao) e [Pedro Markun](https://linkedin.com/in/pedromarkun).
+Este workshop foi realizado em alguns eventos
+* TDC Summit São Paulo, dia 27/03/2024 por [Luís Leão](https://linkedin.com/in/luisleao) e [Pedro Markun](https://linkedin.com/in/pedromarkun).
+* TDC Floripa, dia 13/06/2024 por [Luís Leão](https://linkedin.com/in/luisleao).
+
 
 Você deve realizar os seguintes passos:
 

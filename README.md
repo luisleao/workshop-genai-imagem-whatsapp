@@ -13,3 +13,10 @@ Você deve realizar os seguintes passos:
 * criar uma conta na OpenAI e gerar uma chave pelo link https://platform.openai.com/api-keys
 * caso deseje utilizar outro modelo como o Gemini, por exemplo, gere sua chave pelo link https://aistudio.google.com/app/apikey?hl=pt-br
 * cada branch corresponde a uma etapa de implementação do workshop.
+
+
+# Prática 1
+* Ativar a Sandbox de WhatsApp
+* Criando um Fluxo no Twilio Studio
+* Conectando a Sandbox com Twilio Studio
+* Tratar recebimento de Arquivos
